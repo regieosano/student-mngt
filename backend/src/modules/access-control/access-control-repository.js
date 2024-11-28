@@ -1,6 +1,6 @@
 const { processDBRequest } = require("../../utils");
 
-const addAccessControl = async (payload) => {
+const addAccessControl = async payload => {
   const { name, path, type, method, hierarchy_id, id } = payload;
   const query = `
         WITH query_result AS (
@@ -14,7 +14,7 @@ const addAccessControl = async (payload) => {
   return rowCount;
 };
 
-const updateAccessControl = async (payload) => {
+const updateAccessControl = async payload => {
   const { id, name, path, hierarchy_id, type, method } = payload;
   const query = `
         UPDATE access_controls
@@ -31,7 +31,7 @@ const updateAccessControl = async (payload) => {
   return rowCount;
 };
 
-const deleteAccessControl = async (id) => {
+const deleteAccessControl = async id => {
   const query = `DELETE FROM access_controls WHERE id = $1`;
   const queryParams = [id];
   const { rowCount } = await processDBRequest({ query, queryParams });
@@ -44,7 +44,7 @@ const getAllAccessControls = async () => {
   return rows;
 };
 
-const getMyAccessControl = async (roleId) => {
+const getMyAccessControl = async roleId => {
   const isUserAdmin = Number(roleId) === 1 ? true : false;
   const query = isUserAdmin
     ? `SELECT * FROM access_controls`

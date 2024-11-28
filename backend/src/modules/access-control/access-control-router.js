@@ -5,8 +5,16 @@ const { isUserAdmin } = require("../../middlewares");
 
 router.get("", isUserAdmin, accessControlController.handleGetAllAccessControls);
 router.post("", isUserAdmin, accessControlController.handleAddAccessControl);
-router.put("/:id", isUserAdmin, accessControlController.handleUpdateAccessControl);
-router.delete("/:id", isUserAdmin, accessControlController.handleDeleteAccessControl);
+router.put(
+  "/:id",
+  isUserAdmin,
+  accessControlController.handleUpdateAccessControl,
+);
+router.delete(
+  "/:id",
+  isUserAdmin,
+  accessControlController.handleDeleteAccessControl,
+);
 router.get("/me", accessControlController.handleGetMyAccessControl);
 
 module.exports = { accessControlRoutes: router };

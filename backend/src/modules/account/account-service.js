@@ -16,7 +16,7 @@ const {
 } = require("./account-repository");
 const { insertRefreshToken, findUserById } = require("../../shared/repository");
 
-const processPasswordChange = async (payload) => {
+const processPasswordChange = async payload => {
   const client = await db.connect();
   try {
     const { userId, oldPassword, newPassword } = payload;
@@ -43,12 +43,12 @@ const processPasswordChange = async (payload) => {
     const accessToken = generateToken(
       { id: userId, role: roleName, csrf_hmac: csrfHmacHash },
       env.JWT_ACCESS_TOKEN_SECRET,
-      env.JWT_ACCESS_TOKEN_TIME_IN_MS
+      env.JWT_ACCESS_TOKEN_TIME_IN_MS,
     );
     const refreshToken = generateToken(
       { id: userId },
       env.JWT_REFRESH_TOKEN_SECRET,
-      env.JWT_REFRESH_TOKEN_TIME_IN_MS
+      env.JWT_REFRESH_TOKEN_TIME_IN_MS,
     );
 
     await insertRefreshToken({ userId, refreshToken }, client);
@@ -69,7 +69,7 @@ const processPasswordChange = async (payload) => {
   }
 };
 
-const processGetAccountDetail = async (userId) => {
+const processGetAccountDetail = async userId => {
   const user = await findUserById(userId);
   if (!user || !user.id) {
     throw new ApiError(404, "User does not exist");

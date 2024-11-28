@@ -14,7 +14,7 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       throw new ApiError(
         401,
-        "Unauthorized. Please provide valid access token."
+        "Unauthorized. Please provide valid access token.",
       );
     }
 
@@ -25,14 +25,14 @@ const authenticateToken = (req, res, next) => {
         if (err) {
           throw new ApiError(
             401,
-            "Unauthorized. Please provide valid refresh token."
+            "Unauthorized. Please provide valid refresh token.",
           );
         }
 
         req.user = user;
         req.refreshToken = refreshToken;
         next();
-      }
+      },
     );
   });
 };

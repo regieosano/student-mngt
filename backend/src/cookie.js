@@ -33,7 +33,7 @@ const setAllCookies = (res, accessToken, refreshToken, csrfToken) => {
   setCsrfTokenCookie(res, csrfToken);
 };
 
-const clearAllCookies = (res) => {
+const clearAllCookies = res => {
   res.clearCookie("accessToken", cookieOptions);
   res.clearCookie("refreshToken", cookieOptions);
   res.clearCookie("csrfToken", cookieOptions);

@@ -11,7 +11,7 @@ const csrfProtection = (req, res, next) => {
 
   const decodedAccessToken = verifyToken(
     accessToken,
-    env.JWT_ACCESS_TOKEN_SECRET
+    env.JWT_ACCESS_TOKEN_SECRET,
   );
   if (!decodedAccessToken || !decodedAccessToken.csrf_hmac) {
     throw new ApiError(400, "Invalid csrf token");

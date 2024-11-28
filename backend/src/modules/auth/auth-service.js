@@ -63,12 +63,12 @@ const login = async (username, passwordFromUser) => {
     const accessToken = generateToken(
       { id: userId, role: roleName, roleId: role_id, csrf_hmac: csrfHmacHash },
       env.JWT_ACCESS_TOKEN_SECRET,
-      env.JWT_ACCESS_TOKEN_TIME_IN_MS
+      env.JWT_ACCESS_TOKEN_TIME_IN_MS,
     );
     const refreshToken = generateToken(
       { id: userId, role: roleName, roleId: role_id },
       env.JWT_REFRESH_TOKEN_SECRET,
-      env.JWT_REFRESH_TOKEN_TIME_IN_MS
+      env.JWT_REFRESH_TOKEN_TIME_IN_MS,
     );
 
     await deleteOldRefreshTokenByUserId(userId, client);
@@ -99,7 +99,7 @@ const login = async (username, passwordFromUser) => {
   }
 };
 
-const logout = async (refreshToken) => {
+const logout = async refreshToken => {
   const affectedRow = await invalidateRefreshToken(refreshToken);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to logout");
@@ -107,14 +107,14 @@ const logout = async (refreshToken) => {
   return { message: "Logged out successfully" };
 };
 
-const getNewAccessAndCsrfToken = async (refreshToken) => {
+const getNewAccessAndCsrfToken = async refreshToken => {
   const client = await db.connect();
   try {
     await client.query("BEGIN");
 
     const decodedToken = verifyToken(
       refreshToken,
-      env.JWT_REFRESH_TOKEN_SECRET
+      env.JWT_REFRESH_TOKEN_SECRET,
     );
     if (!decodedToken || !decodedToken.id) {
       throw new ApiError(401, "Invalid refresh token");
@@ -136,7 +136,7 @@ const getNewAccessAndCsrfToken = async (refreshToken) => {
     const accessToken = generateToken(
       { id: userId, role: roleName, roleId: role_id, csrf_hmac: csrfHmacHash },
       env.JWT_ACCESS_TOKEN_SECRET,
-      env.JWT_ACCESS_TOKEN_TIME_IN_MS
+      env.JWT_ACCESS_TOKEN_TIME_IN_MS,
     );
 
     await client.query("COMMIT");
@@ -154,7 +154,7 @@ const getNewAccessAndCsrfToken = async (refreshToken) => {
   }
 };
 
-const processAccountEmailVerify = async (id) => {
+const processAccountEmailVerify = async id => {
   const EMAIL_VERIFIED_AND_EMAIL_SEND_SUCCESS =
     "Email verified successfully. Please setup password using link provided in the email.";
   const EMAIL_VERIFIED_BUT_EMAIL_SEND_FAIL =
@@ -181,7 +181,7 @@ const processAccountEmailVerify = async (id) => {
   }
 };
 
-const processPasswordSetup = async (payload) => {
+const processPasswordSetup = async payload => {
   const { userId, userEmail, password } = payload;
 
   const result = await doesEmailExist(userId, userEmail);
@@ -205,7 +205,7 @@ const processPasswordSetup = async (payload) => {
   };
 };
 
-const processResendEmailVerification = async (userId) => {
+const processResendEmailVerification = async userId => {
   try {
     const user = await findUserById(userId);
     if (!user) {
@@ -220,7 +220,7 @@ const processResendEmailVerification = async (userId) => {
     if (is_email_verified) {
       throw new ApiError(
         400,
-        "Email already verified. Please setup your account password using the link sent in the email."
+        "Email already verified. Please setup your account password using the link sent in the email.",
       );
     }
 
@@ -238,7 +238,7 @@ const processResendEmailVerification = async (userId) => {
   }
 };
 
-const processResendPwdSetupLink = async (userId) => {
+const processResendPwdSetupLink = async userId => {
   try {
     const user = await findUserById(userId);
     if (!user) {
@@ -265,7 +265,7 @@ const processResendPwdSetupLink = async (userId) => {
   }
 };
 
-const processPwdReset = async (userId) => {
+const processPwdReset = async userId => {
   try {
     const user = await findUserById(userId);
     if (!user) {

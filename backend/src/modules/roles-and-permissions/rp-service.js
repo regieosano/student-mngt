@@ -16,14 +16,14 @@ const {
   deletePermissionForRoleId,
 } = require("./rp-repository");
 
-const checkIfRoleIdExist = async (id) => {
+const checkIfRoleIdExist = async id => {
   const affectedRow = await doesRoleIdExist(id);
   if (affectedRow <= 0) {
     throw new ApiError(404, "Invalid role id");
   }
 };
 
-const addRole = async (name) => {
+const addRole = async name => {
   const roleNameExist = await doesRoleNameExist(name);
   if (roleNameExist > 0) {
     throw new ApiError(409, "Role Name already exists.");
@@ -46,7 +46,7 @@ const fetchRoles = async () => {
   return roles;
 };
 
-const fetchRole = async (id) => {
+const fetchRole = async id => {
   await checkIfRoleIdExist(id);
 
   const role = await getRoleById(id);
@@ -89,14 +89,14 @@ const addRolePermission = async (roleId, permissionIds) => {
 
     const idArray = permissionIds
       .split(",")
-      .map((id) => id.trim())
+      .map(id => id.trim())
       .filter(Boolean);
     if (idArray.length === 0) {
       await deletePermissionForRoleId(roleId, client);
       await client.query("COMMIT");
       return { message: "Permission of given role deleted successfully" };
     }
-    const ids = idArray.map((id) => parseInt(id, 10));
+    const ids = idArray.map(id => parseInt(id, 10));
     const accessControls = await getAccessControlByIds(ids, client);
 
     if (accessControls.length > 0) {
@@ -117,7 +117,7 @@ const addRolePermission = async (roleId, permissionIds) => {
   }
 };
 
-const getRolePermissions = async (roleId) => {
+const getRolePermissions = async roleId => {
   await checkIfRoleIdExist(roleId);
 
   const permissions = await getPermissionsById(roleId);
@@ -128,7 +128,7 @@ const getRolePermissions = async (roleId) => {
   return permissions;
 };
 
-const fetchUsersByRoleId = async (id) => {
+const fetchUsersByRoleId = async id => {
   await checkIfRoleIdExist(id);
 
   const users = await getUsersByRoleId(id);

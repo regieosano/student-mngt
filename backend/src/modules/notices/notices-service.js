@@ -30,7 +30,7 @@ const processGetNoticeRecipients = async () => {
   return recipients;
 };
 
-const processGetNoticeRecipient = async (id) => {
+const processGetNoticeRecipient = async id => {
   const recipient = await getNoticeRecipientById(id);
   if (!recipient) {
     throw new ApiError(404, "Recipient detail not found");
@@ -39,7 +39,7 @@ const processGetNoticeRecipient = async (id) => {
   return recipient;
 };
 
-const fetchAllNotices = async (userId) => {
+const fetchAllNotices = async userId => {
   const notices = await getNotices(userId);
   if (notices.length <= 0) {
     throw new ApiError(404, "Notices not found");
@@ -47,7 +47,7 @@ const fetchAllNotices = async (userId) => {
   return notices;
 };
 
-const fetchNoticeDetailById = async (id) => {
+const fetchNoticeDetailById = async id => {
   const noticeDetail = await getNoticeById(id);
   if (!noticeDetail) {
     throw new ApiError(404, "Notice detail not found");
@@ -55,7 +55,7 @@ const fetchNoticeDetailById = async (id) => {
   return noticeDetail;
 };
 
-const addNotice = async (payload) => {
+const addNotice = async payload => {
   const affectedRow = await addNewNotice(payload);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to add new notice");
@@ -64,7 +64,7 @@ const addNotice = async (payload) => {
   return { message: "Notice added successfully" };
 };
 
-const updateNotice = async (payload) => {
+const updateNotice = async payload => {
   const affectedRow = await updateNoticeById(payload);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to update notice");
@@ -73,7 +73,7 @@ const updateNotice = async (payload) => {
   return { message: "Notice updated successfully" };
 };
 
-const processNoticeStatus = async (payload) => {
+const processNoticeStatus = async payload => {
   const { noticeId, status, currentUserId, currentUserRole } = payload;
   const notice = await getNoticeById(noticeId);
   if (!notice) {
@@ -90,12 +90,12 @@ const processNoticeStatus = async (payload) => {
     currentUserRole,
     currentUserId,
     authorId,
-    status
+    status,
   );
   if (!userCanManageStatus) {
     throw new ApiError(
       403,
-      "Forbidden. You do not have permission to access to this resource."
+      "Forbidden. You do not have permission to access to this resource.",
     );
   }
 
@@ -116,7 +116,7 @@ const handleStatusCheck = (
   currentUserRole,
   currentUserId,
   authorId,
-  status
+  status,
 ) => {
   if (currentUserRole === "admin") {
     return true;
@@ -134,7 +134,7 @@ const handleStatusCheck = (
   return false;
 };
 
-const processAddNoticeRecipient = async (payload) => {
+const processAddNoticeRecipient = async payload => {
   const affectedRow = await addNoticeRecipient(payload);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to add notice recipient");
@@ -143,7 +143,7 @@ const processAddNoticeRecipient = async (payload) => {
   return { message: "Notice Recipient added successfully" };
 };
 
-const processUpdateNoticeRecipient = async (payload) => {
+const processUpdateNoticeRecipient = async payload => {
   const affectedRow = await updateNoticeRecipient(payload);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to update notice recipient");
@@ -152,7 +152,7 @@ const processUpdateNoticeRecipient = async (payload) => {
   return { message: "Notice Recipient updated successfully" };
 };
 
-const processDeleteNoticeRecipient = async (id) => {
+const processDeleteNoticeRecipient = async id => {
   const affectedRow = await deleteNoticeRecipient(id);
   if (affectedRow <= 0) {
     throw new ApiError(500, "Unable to delete notice recipient");
