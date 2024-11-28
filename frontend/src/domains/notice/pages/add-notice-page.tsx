@@ -35,6 +35,7 @@ export const AddNotice = () => {
 
   const onSaveNotice = async (data: NoticeFormProps) => {
     try {
+      data.description = "";
       const result = await addNotice(data).unwrap();
       toast.info(result.message);
       navigate('/app/notices');
